@@ -3,15 +3,25 @@
 var gulp = require('gulp');
 var connect = require('gulp-connect'); //run a local dev server.
 var open = require('gulp-open'); //Open a URL in a web brower.
+var browserify = require('browserify'); //Bundles JS.
+var reactify = require('reactify'); //Transforms React JSX to JS.
+var source = require('vinyl-source-stream');//User conventional text streams with gulp.
+var concat = require('gulp-concat');
 
 var config = {
     port:9005,
     devBaseUrl: 'http://localhost',
     paths : {
         html:'./src/*.html',
-        dist:'./dist'
+        js:'./src/**/*.js',
+        dist:'./dist',
+        css : [
+            'node_modules/bootstrap/dist/css/bootstrap.min.css',
+            'node_modules/bootstrap/dist/css/bootstrap-theme.min.css'
+        ],  
+        mainJs : './src/main.js'
     }
-}
+};
 
 //Start a local dev server
 gulp.task('connect', function() {
@@ -21,7 +31,17 @@ gulp.task('connect', function() {
         base:config.devBaseUrl,
         livereload:true
     });
-})
+});
+
+gulp.task('js', function() {
+    browserify(config.paths.mainJs)
+        .transform(reactify)
+            .bundle()
+                .on('error', console.error.bind(console))
+                    .pipe(source('bundle.js'))
+                        .pipe(gulp.dest(config.paths.dist + '/scripts'))
+                            .pipe(connect.reload());
+});
 
 //Go get index.html and open it on localhost:port/ ..
 gulp.task('open', ['connect'], function() {
@@ -35,4 +55,18 @@ gulp.task('html', function() {
             .pipe(connect.reload());
 });
 
-gulp.task('default', ['html', 'open']);
+gulp.task('css', function() {
+    gulp.src(config.paths.css)
+    .pipe(concat('bundle.css'))
+
+        .pipe(gulp.dest(config.paths.dist + '/css'));
+     
+});
+
+gulp.task('watch', function() {
+    gulp.watch(config.paths.html, ['html']);
+    gulp.watch(config.paths.js, ['js']);
+});
+
+
+gulp.task('default', ['html', 'js', 'open', 'css', 'watch']);
