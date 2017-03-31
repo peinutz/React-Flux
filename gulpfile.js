@@ -48,7 +48,7 @@ gulp.task('js', function() {
 
 gulp.task('open', ['connect'], function() {
 	gulp.src('dist/index.html')
-		.pipe(open('', { url: config.devBaseUrl + ':' + config.port + '/'}));
+		.pipe(open('', { app: 'chrome', url: config.devBaseUrl + ':' + config.port + '/'}));
 });
 
 gulp.task('html', function() {
