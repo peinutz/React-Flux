@@ -1,3 +1,4 @@
+
 $ = jQuery = require('jquery');
 var React = require('react');
 var Home = require('./components/homePage');
@@ -33,3 +34,4 @@ var Header = require('./components/common/header');
 	window.addEventListener('hashchange', render);
 	render();
 })(window);
+
