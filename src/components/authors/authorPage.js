@@ -25,7 +25,7 @@ componentDidMount: function() {
                 <td> {author.firstName} {author.lastName}</td>
              </tr>   
             );
-        }
+        },
         return (
             <div>
                 <h1>Authors</h1>
