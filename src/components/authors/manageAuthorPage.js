@@ -3,8 +3,8 @@
 var React = require('react');
 var Router = require('react-router');
 var AuthorForm = require('./authorForm');
-var AuthorActions = require('../../api/authorActions');
-var Authorstore = require('../../api/authorStore');
+var AuthorActions = require('../../actions/authorsActions');
+var Authorstore = require('../../Stores/authorStore');
 var toastr = require('toastr');
 
 var ManageAuthorPage = React.createClass({
